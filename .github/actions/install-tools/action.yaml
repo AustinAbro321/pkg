@@ -26,6 +26,7 @@ runs:
     - name: Install UDS CLI
       shell: bash
       env:
+        # renovate: datasource=github-tags depName=defenseunicorns/uds-cli versioning=semver
         VERSION: v0.9.3
       run: |
         curl --location --output /usr/local/bin/uds "https://github.com/defenseunicorns/uds-cli/releases/download/${VERSION}/uds-cli_${VERSION}_Linux_amd64"
