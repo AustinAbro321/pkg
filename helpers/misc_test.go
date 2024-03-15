@@ -15,6 +15,7 @@ import (
 
 type TestMiscSuite struct {
 	suite.Suite
+
 	*require.Assertions
 	map1 map[string]interface{}
 	map2 map[string]interface{}
