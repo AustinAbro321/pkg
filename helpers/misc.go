@@ -21,6 +21,8 @@ func Retry(fn func() error, retries int, delay time.Duration, logger func(format
 			break
 		}
 
+		
+
 		pow := math.Pow(2, float64(r))
 		backoff := delay * time.Duration(pow)
 
@@ -29,12 +31,16 @@ func Retry(fn func() error, retries int, delay time.Duration, logger func(format
 		time.Sleep(backoff)
 	}
 
+
+
 	return err
 }
 
 // MergeMap merges map m2 with m1 overwriting common values with m2's values.
 func MergeMap[T any](m1, m2 map[string]T) (r map[string]T) {
 	r = map[string]T{}
+
+
 
 	for key, value := range m1 {
 		r[key] = value
