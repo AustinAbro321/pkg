@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/go-git/go-git v4.7.0+incompatible
 	github.com/go-git/go-git/v5 v5.11.0
-	github.com/google/go-github/v52 v52.0.0
+	github.com/google/go-github/v60 v60.0.0
 	golang.org/x/mod v0.16.0
 )
 
