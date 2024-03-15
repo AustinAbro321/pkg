@@ -21,8 +21,6 @@ func Retry(fn func() error, retries int, delay time.Duration, logger func(format
 			break
 		}
 
-		
-
 		pow := math.Pow(2, float64(r))
 		backoff := delay * time.Duration(pow)
 
