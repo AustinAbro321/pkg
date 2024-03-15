@@ -28,6 +28,7 @@ runs:
 
     - name: generate release notes
       run: |
+        git cliff --version
         git cliff --tag ${{ steps.module-tag.outputs.new-version }} --include-path "${{ inputs.module }}/*" > notes.txt
       shell: bash
 
