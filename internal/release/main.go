@@ -2,7 +2,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -15,7 +14,6 @@ import (
 	git "github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/plumbing/storer"
 	"golang.org/x/mod/modfile"
 )
 
@@ -27,7 +25,7 @@ func getProjectPath() (string, error) {
 	return filepath.Join(filepath.Dir(filename), "..", ".."), nil
 }
 
-func cli(module string) error {
+func printNewVersion(module string) error {
 	// Ensure the path is consistent with the go mod
 	baseProjectPath, err := getProjectPath()
 	if err != nil {
@@ -91,7 +89,7 @@ func cli(module string) error {
 	return nil
 }
 
-func getCommitMessagesFromLastTag(version *semver.Version, module string) ([]string, error) {
+func getCommitMessagesFromLastTag(lastTagVersion *semver.Version, module string) ([]string, error) {
 	repoPath, err := getProjectPath()
 	if err != nil {
 		return nil, err
@@ -101,13 +99,12 @@ func getCommitMessagesFromLastTag(version *semver.Version, module string) ([]str
 		return nil, fmt.Errorf("failed to get repo: %w", err)
 	}
 
-	compareTag := fmt.Sprintf("%s/%s", module, version.Original())
-	latestTagRef, err := r.Tag(compareTag)
+	latestTag := fmt.Sprintf("%s/%s", module, lastTagVersion.Original())
+	latestTagRef, err := r.Tag(latestTag)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tag: %w", err)
 	}
 
-	// Get the commit object for this tag
 	tagCommit, err := r.CommitObject(latestTagRef.Hash())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get commit from tag: %w", err)
@@ -118,7 +115,6 @@ func getCommitMessagesFromLastTag(version *semver.Version, module string) ([]str
 		return nil, fmt.Errorf("failed to get reference: %w", err)
 	}
 
-	// Get the commit object for HEAD
 	headCommit, err := r.CommitObject(headRef.Hash())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get commit: %w", err)
@@ -140,13 +136,13 @@ func getCommitMessagesFromLastTag(version *semver.Version, module string) ([]str
 	err = commits.ForEach(func(c *object.Commit) error {
 		if c.Hash == tagCommit.Hash {
 			// Once we reach the tag's commit, stop iterating
-			return storer.ErrStop
+			return nil
 		}
 		commitMessages = append(commitMessages, c.Message)
 		return nil
 	})
 
-	if err != nil && !errors.Is(err, storer.ErrStop) {
+	if err != nil {
 		return nil, fmt.Errorf("could not iterate over commits %w", err)
 	}
 
@@ -163,7 +159,6 @@ func getModuleTags(module string) ([]string, error) {
 		return nil, fmt.Errorf("failed to open repository: %w", err)
 	}
 
-	// List all tag references
 	tagRefs, err := r.Tags()
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch tags: %w", err)
@@ -212,7 +207,7 @@ func getTypeOfChange(commits []string) string {
 
 func main() {
 	module := os.Args[1]
-	err := cli(module)
+	err := printNewVersion(module)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
