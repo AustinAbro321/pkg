@@ -74,6 +74,7 @@ func MergeMapRecursive(m1, m2 map[string]interface{}) (r map[string]interface{})
 	for key, value := range m1 {
 		r[key] = value
 	}
+	
 
 	for key, value := range m2 {
 		if value, ok := value.(map[string]interface{}); ok {
