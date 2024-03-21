@@ -29,7 +29,6 @@ func Retry(fn func() error, retries int, delay time.Duration, logger func(format
 		time.Sleep(backoff)
 	}
 
-	
 	return err
 }
 
