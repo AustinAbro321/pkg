@@ -6,7 +6,7 @@ build:
 build-%:
 	cd $(subst :,/,$*); go build .
 
-tidy:
+tidy: 
 	$(MAKE) $(addprefix tidy-, $(MODULES))
 
 tidy-%:
