@@ -11,7 +11,7 @@ tidy:
 
 tidy-%:
 	cd $(subst :,/,$*); go mod tidy
-
+ 
 fmt:
 	$(MAKE) $(addprefix fmt-, $(MODULES))
 
