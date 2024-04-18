@@ -28,7 +28,7 @@
     },
     {
       "fileMatch": [
-        ".github/**"
+        ".github/*"
       ],
       "matchStrings": [
         "# renovate: datasource=github-tags depName=orhun/git-cliff versioning=semver\n\\s*VERSION: (?<currentValue>[\\d.]+)"
