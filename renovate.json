@@ -20,6 +20,7 @@
   ],
   "regexManagers": [
     {
+      "fileMatch": ["\\.*\\.ya?ml$"],
       "matchStrings": [
         "# renovate: datasource=github-tags depName=anchore/grype versioning=semver\n\\s*VERSION: (?<currentValue>v[\\d.]+)"
       ],
